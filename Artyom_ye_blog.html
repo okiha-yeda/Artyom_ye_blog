@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人主页 | 记录与分享</title>
+    <!-- 【修复点】去掉了链接中的空格，图标即可正常显示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- CSS 变量定义 --- */
+        :root {
+            /* 主色调：鼠尾草绿 */
+            --primary-color: rgb(150, 189, 149);
+            
+            /* 背景色：暖米白/花卉白 */
+            --bg-color: rgb(255, 250, 240);
+            
+            /* 卡片背景 */
+            --card-bg: #FFFFFF;
+            
+            /* 字体颜色 */
+            --text-main: #4a4a4a;
+            --text-secondary: #7a7a7a;
+            --text-light: #a3a3a3;
+            
+            /* 间距与圆角 */
+            --spacing-unit: 20px;
+            --radius: 12px;
+            
+            /* 阴影 */
+            --shadow: 0 8px 20px rgba(150, 189, 149, 0.1); 
+            --transition: all 0.3s ease;
+        }
+
+        /* --- 基础重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- 布局容器 --- */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-unit);
+        }
+
+        /* --- 头部区域 --- */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+        }
+        .nav-links a {
+            margin-left: 25px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* --- 个人简介 (Hero Section) --- */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+        .hero p {
+            color: var(--text-secondary);
+            max-width: 580px;
+            margin: 0 auto 35px;
+            font-size: 1.05rem;
+        }
+        
+        /* 社交聚合区 */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        .social-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+        .social-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            transform: translateY(-5px) rotate(5deg);
+            box-shadow: 0 8px 15px rgba(150, 189, 149, 0.4);
+        }
+
+        /* --- 通用板块样式 --- */
+        section {
+            padding: 50px 0;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 45px;
+            text-align: center;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .section-title::before, .section-title::after {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 2px;
+            background: var(--primary-color);
+            opacity: 0.5;
+        }
+
+        /* --- 项目展示区 --- */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+        }
+        .project-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 35px 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.5);
+            position: relative;
+            overflow: hidden;
+            display: flex; /* 确保内容垂直排列 */
+            flex-direction: column;
+        }
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-color);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(150, 189, 149, 0.2);
+        }
+        .project-card:hover::before {
+            opacity: 1;
+        }
+        
+        .project-meta {
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .project-title {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            flex-grow: 1; /* 让描述撑开高度，使底部的标签对齐 */
+        }
+        .tag {
+            display: inline-block;
+            background: var(--bg-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-right: 8px;
+            margin-bottom: 5px;
+        }
+
+        /* --- 每周周记模块 --- */
+        .journal-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px; 
+        }
+        .journal-item {
+            background: #fff;
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: var(--transition);
+        }
+        .journal-item:hover {
+            transform: translateX(5px);
+        }
+        .journal-date-badge {
+            display: inline-block;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        .journal-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+        .journal-content {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        
+        /* --- 页脚 --- */
+        footer {
+            text-align: center;
+            padding: 60px 0 40px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* --- 响应式适配 --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .project-grid { grid-template-columns: 1fr; }
+            .journal-item { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">MyBlog.</div>
+            <nav class="nav-links">
+                <a href="#projects">项目</a>
+                <a href="#journal">周记</a>
+                <a href="#about">关于</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 个人简介 & 社交聚合 -->
+    <section class="hero" id="about">
+        <div class="container">
+            <h1>夜的三次方</h1>
+            <p>在这个温暖的角落，记录代码、生活与思考。</p>
+            
+            <div class="social-links">
+                <a href="https://github.com/okiha-yeda" target="_blank" class="social-btn" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://weibo.com/u/7255490064" target="_blank" class="social-btn" title="微博">
+                    <i class="fab fa-weibo"></i>
+                </a>
+                <a href="https://space.bilibili.com/329357533" target="_blank" class="social-btn" title="Bilibili">
+                    <i class="fab fa-bilibili"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目展示区 -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">个人项目</h2>
+            <div class="project-grid" id="project-list">
+                <!-- JS将自动填充内容 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 每周周记区 -->
+    <section id="journal">
+        <div class="container">
+            <h2 class="section-title">每周周记</h2>
+            <div class="journal-container" id="journal-list">
+                <!-- JS将自动填充内容 -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <!-- 【优化点】更新年份为 2025 -->
+            <p>&copy; 2025 MyBlog. Designed with Warmth.</p>
+        </div>
+    </footer>
+
+    <!-- 脚本逻辑 -->
+    <script>
+        // --- 1. 项目数据配置 ---
+        const projects = [
+            {
+                title: "Gitlet CS61B 基于Java开发的简易git版本控制",
+                desc: "针对伯克利大学CS61B, spring2021 Project2构建的Gitlet. Gitlet是一个版本管理系统，仿照主流系统Git的功能并实现了其部分基本命令，包括init, add, commit, rm, checkout, branch, reset, rm-branch, merge等。",
+                date: "2025 Autumn",
+                tags: ["Java"]
+            },
+            {
+                title: "To Be Continued",
+                desc: "正在构思下一个有趣的创意...",
+                date: "Future",
+                tags: ["Idea"]
+            },
+            {
+                title: "To Be Continued",
+                desc: "虚位以待，期待新的灵感。",
+                date: "Future",
+                tags: ["Loading"]
+            }
+        ];
+
+        // --- 2. 周记数据配置 ---
+        const journals = [
+            {
+                title: "爬进实验室打灰",
+                date: "2025-12-21",
+                content: "从NTU李宏毅老师的深度学习课程开始，用DNN跑一些回归，分类……导师先让我熟悉下深度学习，先开始尝试一下YOLO，下周组会我第一个讲QAQ。"
+            },
+            {
+                title: "跟着师兄学习一下TM机械臂的操作",
+                date: "2025-12-22",
+                content: "跟着研三的师兄去实验室看了看，尝试操作了下TM机械臂，师兄的课题要通过模型训练实现机械臂的自动抓取。看了Hugging Face上的几个项目感觉好复杂（雾）。"
+            },
+            {
+                title: "工程里弄组乐队（bushi）",
+                date: "2025-12-22",
+                content: "加加鸽给杯鸽（这两位B站同名）寄来了一个基于ESP32-S3的钢尺模拟钢琴，可以直接播放MIDI，真的很有创意……钢尺振动发出的低频着实很性感……跟杯鸽和另一位大四的学长捣鼓了一晚上，享受，至福……"
+            }
+        ];
+
+        // --- 3. 渲染函数 ---
+        
+        // 渲染项目
+        function renderProjects() {
+            const container = document.getElementById('project-list');
+            let html = '';
+            projects.forEach(p => {
+                const tagsHtml = p.tags.map(tag => `<span class="tag">#${tag}</span>`).join('');
+                
+                html += `
+                    <div class="project-card">
+                        <div class="project-meta">${p.date}</div>
+                        <h3 class="project-title">${p.title}</h3>
+                        <p class="project-desc">${p.desc}</p>
+                        <div class="project-tags">${tagsHtml}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // 渲染周记
+        function renderJournals() {
+            const container = document.getElementById('journal-list');
+            let html = '';
+            journals.forEach(j => {
+                html += `
+                    <div class="journal-item">
+                        <div class="journal-date-badge">${j.date}</div>
+                        <h3 class="journal-title">${j.title}</h3>
+                        <div class="journal-content">${j.content}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects();
+            renderJournals();
+        });
+    </script>
+</body>
+</html>
